@@ -1,4 +1,6 @@
-﻿using BlackBrownie;
+﻿// dotnet run --project BlackBrownie
+
+using BlackBrownie;
 using BlackBrownie.Functions;
 
 IFunction[] functions =
@@ -35,4 +37,4 @@ Console.WriteLine(f.DescriptionArgs());
 var readLineArgs = Console.ReadLine();
 var argsArray = readLineArgs?.Split(new[] { ' ', '　' }, StringSplitOptions.RemoveEmptyEntries)
                 ?? Array.Empty<string>();
-f.Do(argsArray);
+await f.Do(argsArray);
