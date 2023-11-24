@@ -1,3 +1,16 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using BlackBrownie;
+using BlackBrownie.Functions;
 
-Console.WriteLine("Hello, World!");
+IFunction[] functions =
+{
+    new FunctionDeleteDeprecated(),
+};
+
+for (var index = 0; index < functions.Length; index++)
+{
+    var function = functions[index];
+    Console.WriteLine(index);
+    Console.WriteLine(function.DescriptionFunction());
+    Console.WriteLine("---------");
+}
+
