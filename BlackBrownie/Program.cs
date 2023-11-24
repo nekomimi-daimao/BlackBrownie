@@ -3,6 +3,8 @@ using BlackBrownie.Functions;
 
 IFunction[] functions =
 {
+    new FunctionUniqueFile(),
+    new FunctionExpandDirectory(),
     new FunctionDeleteDeprecated(),
 };
 
