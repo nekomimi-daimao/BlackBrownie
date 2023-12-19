@@ -22,7 +22,7 @@ public sealed class FunctionUniqueFile : IFunction
         var targetInfo = new DirectoryInfo(targetDirRaw);
         if (!targetInfo.Exists)
         {
-            Console.WriteLine($"not dir {targetDirRaw}");
+            Console.WriteLine($"no dir {targetDirRaw}");
             return;
         }
 

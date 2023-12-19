@@ -8,6 +8,7 @@ IFunction[] functions =
     new FunctionUniqueFile(),
     new FunctionExpandDirectory(),
     new FunctionDeleteDeprecated(),
+    new FunctionUniqueUri(),
 };
 
 for (var index = 0; index < functions.Length; index++)
