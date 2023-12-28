@@ -9,6 +9,7 @@ IFunction[] functions =
     new FunctionExpandDirectory(),
     new FunctionDeleteDeprecated(),
     new FunctionUniqueUri(),
+    new FunctionUnseal(),
 };
 
 for (var index = 0; index < functions.Length; index++)
