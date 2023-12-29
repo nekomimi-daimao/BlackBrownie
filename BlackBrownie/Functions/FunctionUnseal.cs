@@ -34,7 +34,7 @@ public class FunctionUnseal : IFunction
         var dirFullName = toDir.FullName;
         foreach (var fileInfo in fromDir.EnumerateFiles("*", SearchOption.AllDirectories))
         {
-            fileInfo.CopyTo(Path.Combine(dirFullName, fileInfo.Name), true);
+            fileInfo.CopyTo(Path.Combine(dirFullName, $"{fileInfo.Directory!.Name}_{fileInfo.Name}"), true);
         }
     }
 }
