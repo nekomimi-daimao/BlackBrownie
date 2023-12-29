@@ -34,6 +34,13 @@ public class FunctionUnseal : IFunction
         var dirFullName = toDir.FullName;
         foreach (var fileInfo in fromDir.EnumerateFiles("*", SearchOption.AllDirectories))
         {
+            if (string.Equals(fileInfo.Extension, ".ini")
+                || string.Equals(fileInfo.Name, "Thumbs.db")
+                || string.Equals(fileInfo.Name, ".DS_Store"))
+            {
+                continue;
+            }
+
             fileInfo.CopyTo(Path.Combine(dirFullName, $"{fileInfo.Directory!.Name}_{fileInfo.Name}"), true);
         }
     }
