@@ -10,6 +10,7 @@ IFunction[] functions =
     new FunctionDeleteDeprecated(),
     new FunctionUniqueUri(),
     new FunctionUnseal(),
+    new FunctionDeleteTarget(),
 };
 
 for (var index = 0; index < functions.Length; index++)
