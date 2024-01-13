@@ -7,7 +7,7 @@ public class FunctionDeleteTarget : IFunction
 {
     public string DescriptionFunction()
     {
-        return "delete target. ^.*検索文字列.*";
+        return "delete target. ^.*[targetKeyword].*";
     }
 
     public string DescriptionArgs()
@@ -29,7 +29,8 @@ public class FunctionDeleteTarget : IFunction
             return;
         }
 
-        var regex = new Regex($"^.*{regexRaw}.*\"");
+        var regex = new Regex($"^.*{regexRaw}.*");
+        Console.WriteLine(regex.ToString());
         var array = directoryInfo.EnumerateFileSystemInfos("*", SearchOption.AllDirectories)
             .Where(info => regex.IsMatch(info.Name))
             .ToArray();
@@ -48,7 +49,7 @@ public class FunctionDeleteTarget : IFunction
         var readLine = Console.ReadLine();
         if (!string.Equals("y", readLine?.ToLower()))
         {
-            Console.WriteLine("stop");
+            Console.WriteLine("canceled");
             return;
         }
 
