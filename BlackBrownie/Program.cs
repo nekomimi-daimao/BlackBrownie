@@ -11,6 +11,7 @@ IFunction[] functions =
     new FunctionUniqueUri(),
     new FunctionUnseal(),
     new FunctionDeleteTarget(),
+    new FunctionInsertString(),
 };
 
 for (var index = 0; index < functions.Length; index++)
