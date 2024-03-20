@@ -12,6 +12,7 @@ IFunction[] functions =
     new FunctionUnseal(),
     new FunctionDeleteTarget(),
     new FunctionInsertString(),
+    new FunctionCompareEditorConfig(),
 };
 
 for (var index = 0; index < functions.Length; index++)
