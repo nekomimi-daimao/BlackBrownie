@@ -13,6 +13,7 @@ IFunction[] functions =
     new FunctionDeleteTarget(),
     new FunctionInsertString(),
     new FunctionCompareEditorConfig(),
+    new FunctionRenamePixivIndex(),
 };
 
 for (var index = 0; index < functions.Length; index++)
