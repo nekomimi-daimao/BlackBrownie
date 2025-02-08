@@ -14,6 +14,7 @@ IFunction[] functions =
     new FunctionInsertString(),
     new FunctionCompareEditorConfig(),
     new FunctionRenamePixivIndex(),
+    new FunctionFilterName(),
 };
 
 for (var index = 0; index < functions.Length; index++)
