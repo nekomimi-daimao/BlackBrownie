@@ -12,7 +12,7 @@ public class FunctionFilterName : IFunction
         return "targetDir, filterWord";
     }
 
-    public async Task Do(string[] args)
+    public Task Do(string[] args)
     {
         var targetDirRaw = args[0];
 
@@ -20,14 +20,14 @@ public class FunctionFilterName : IFunction
         if (!targetInfo.Exists)
         {
             Console.WriteLine($"not dir {targetDirRaw}");
-            return;
+            return Task.CompletedTask;
         }
 
         var filterWord = args[1];
         if (string.IsNullOrEmpty(filterWord))
         {
             Console.WriteLine($"filter");
-            return;
+            return Task.CompletedTask;
         }
 
         var fileInfos = targetInfo.GetFiles("*", SearchOption.AllDirectories);
@@ -48,5 +48,7 @@ public class FunctionFilterName : IFunction
             var to = Path.Combine(towardDir.FullName, fileName);
             f.CopyTo(to, false);
         }
+
+        return Task.CompletedTask;
     }
 }

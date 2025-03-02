@@ -43,11 +43,15 @@ public sealed class FunctionUniqueFile : IFunction
             }
 
             var add = cache.Add(hashStr.ToString());
-
-            if (!add)
+            if (add)
             {
-                file.Delete();
+                continue;
             }
+
+            Console.WriteLine($"delete file {file.FullName}");
+            file.Delete();
         }
+        
+        Console.WriteLine($"done {fileInfos.Length} -> {cache.Count}");
     }
 }
