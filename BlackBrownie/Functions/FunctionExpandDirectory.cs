@@ -9,7 +9,7 @@ public sealed class FunctionExpandDirectory : IFunction
 
     public string DescriptionArgs()
     {
-        return "targetDir";
+        return "targetDir, all";
     }
 
     public async Task Do(string[] args)
@@ -17,6 +17,7 @@ public sealed class FunctionExpandDirectory : IFunction
         await Task.CompletedTask;
 
         var targetDirRaw = args[0];
+        var allRaw = args.Length > 1;
 
         var targetInfo = new DirectoryInfo(targetDirRaw);
         if (!targetInfo.Exists)
@@ -28,7 +29,9 @@ public sealed class FunctionExpandDirectory : IFunction
         const string openedDir = "_opened";
         var mergedDir = targetInfo.CreateSubdirectory(openedDir);
         var mergedPath = mergedDir.FullName;
-        var directories = targetInfo.GetDirectories().Where(info => !string.Equals(info.Name, openedDir));
+        var searchOption = allRaw ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+        var directories = targetInfo.GetDirectories("*", searchOption)
+            .Where(info => !string.Equals(info.Name, openedDir));
 
         foreach (var cd in directories)
         {
