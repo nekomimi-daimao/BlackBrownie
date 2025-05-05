@@ -50,7 +50,7 @@ public class FunctionDownsizeImage : IFunction
             return;
         }
 
-        var parentDir = targetDir.Parent.CreateSubdirectory($"{targetDir.Name}_strip");
+        var parentDir = targetDir.Parent.CreateSubdirectory($"{targetDir.Name}_downsize");
         var outputDir = parentDir.FullName;
 
         var channel = Channel.CreateUnbounded<FileInfo>(new UnboundedChannelOptions
