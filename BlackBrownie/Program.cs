@@ -15,6 +15,7 @@ IFunction[] functions =
     new FunctionCompareEditorConfig(),
     new FunctionRenamePixivIndex(),
     new FunctionFilterName(),
+    new FunctionDownsizeImage(),
 };
 
 for (var index = 0; index < functions.Length; index++)
