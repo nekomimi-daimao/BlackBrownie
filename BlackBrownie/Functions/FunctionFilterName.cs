@@ -12,7 +12,7 @@ public class FunctionFilterName : IFunction
         return "targetDir, filterWord";
     }
 
-    public Task Do(string[] args)
+    public Task Do(string[] args, CancellationToken token)
     {
         var targetDirRaw = args[0];
 
@@ -39,6 +39,11 @@ public class FunctionFilterName : IFunction
 
         foreach (var f in fileInfos)
         {
+            if (token.IsCancellationRequested)
+            {
+                return Task.CompletedTask;
+            }
+
             var fileName = f.Name;
             if (!fileName.Contains(filterWord, StringComparison.InvariantCultureIgnoreCase))
             {

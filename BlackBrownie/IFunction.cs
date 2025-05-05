@@ -6,5 +6,5 @@ public interface IFunction
 
     public string DescriptionArgs();
 
-    public Task Do(string[] args);
+    public Task Do(string[] args, CancellationToken token);
 }

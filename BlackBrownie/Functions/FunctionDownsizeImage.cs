@@ -16,7 +16,7 @@ public class FunctionDownsizeImage : IFunction
         return "targetDir, limit(mb)";
     }
 
-    public async Task Do(string[] args)
+    public async Task Do(string[] args, CancellationToken token)
     {
         var targetDirRaw = args[0];
         var ratioRaw = args[1];
@@ -39,7 +39,7 @@ public class FunctionDownsizeImage : IFunction
         var fileInfos = targetDir.EnumerateFiles("*", SearchOption.AllDirectories)
             .Where(info => supportedExtensions.Contains(info.Extension.ToLowerInvariant()))
             .ToArray();
-        
+
         Console.WriteLine(fileInfos.Length);
 
         var limit = ratio * 1048576;
@@ -63,20 +63,20 @@ public class FunctionDownsizeImage : IFunction
 
         foreach (var fileInfo in fileInfos)
         {
-            await channelWriter.WaitToWriteAsync();
-            await channelWriter.WriteAsync(fileInfo);
+            await channelWriter.WaitToWriteAsync(token);
+            await channelWriter.WriteAsync(fileInfo, token);
         }
 
         channelWriter.TryComplete();
 
-        var consumers = Enumerable.Range(0, 4)
+        var consumers = Enumerable.Range(0, 8)
             .Select(async _ =>
             {
-                while (await channel.Reader.WaitToReadAsync())
+                while (await channel.Reader.WaitToReadAsync(token))
                 {
                     if (channel.Reader.TryRead(out var item))
                     {
-                        await Resize(item, inputDir, outputDir, limit);
+                        await Resize(item, inputDir, outputDir, limit, token);
                     }
                 }
             }).ToArray();
@@ -86,8 +86,12 @@ public class FunctionDownsizeImage : IFunction
         Console.WriteLine("done");
     }
 
-    private static async Task Resize(FileInfo fileInfo, string inputDirectoryPath, string outputDirectoryPath,
-        long limit)
+    private static async Task Resize(
+        FileInfo fileInfo,
+        string inputDirectoryPath,
+        string outputDirectoryPath,
+        long limit,
+        CancellationToken token)
     {
         try
         {
@@ -110,7 +114,7 @@ public class FunctionDownsizeImage : IFunction
                 return;
             }
 
-            using var image = await Image.LoadAsync(fileInfo.OpenRead());
+            using var image = await Image.LoadAsync(fileInfo.OpenRead(), token);
             var resizeRatio = fileInfo.Length / limit;
             var resizeOptions = new ResizeOptions
             {
@@ -118,7 +122,7 @@ public class FunctionDownsizeImage : IFunction
                 Mode = ResizeMode.Max,
             };
             image.Mutate(x => x.Resize(resizeOptions));
-            await image.SaveAsync(outputInfo.FullName);
+            await image.SaveAsync(outputInfo.FullName, cancellationToken: token);
         }
         catch (Exception e)
         {

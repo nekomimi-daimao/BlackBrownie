@@ -18,7 +18,7 @@ public partial class FunctionCompareEditorConfig : IFunction
     private const string RegexPattern = @"\[.+\]";
     private readonly Regex _regex = MyRegex();
 
-    public async Task Do(string[] args)
+    public async Task Do(string[] args, CancellationToken token)
     {
         var configARaw = args[0];
         var configBRaw = args[1];
@@ -38,9 +38,9 @@ public partial class FunctionCompareEditorConfig : IFunction
             return;
         }
 
-        var allLinesA = await File.ReadAllLinesAsync(fileInfoA.FullName);
+        var allLinesA = await File.ReadAllLinesAsync(fileInfoA.FullName, token);
         var a = Parse(allLinesA);
-        var allLinesB = await File.ReadAllLinesAsync(fileInfoB.FullName);
+        var allLinesB = await File.ReadAllLinesAsync(fileInfoB.FullName, token);
         var b = Parse(allLinesB);
 
         var configsA = a.ToDictionary(config => config.Target);
@@ -156,7 +156,7 @@ public partial class FunctionCompareEditorConfig : IFunction
                 }
             }
 
-            await File.WriteAllTextAsync(resultRaw, stringBuilder.ToString());
+            await File.WriteAllTextAsync(resultRaw, stringBuilder.ToString(), token);
         }
     }
 

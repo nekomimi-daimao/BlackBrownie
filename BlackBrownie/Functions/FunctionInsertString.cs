@@ -12,7 +12,7 @@ public class FunctionInsertString : IFunction
         return "targetDir, insertTxtPath, targetExtension";
     }
 
-    public async Task Do(string[] args)
+    public async Task Do(string[] args, CancellationToken token)
     {
         var targetDirRaw = args[0];
         var insertTextRaw = args[1];
@@ -24,7 +24,7 @@ public class FunctionInsertString : IFunction
             return;
         }
 
-        var insertText = await File.ReadAllTextAsync(insertTextRaw);
+        var insertText = await File.ReadAllTextAsync(insertTextRaw, token);
 
         foreach (var file in targetInfo.EnumerateFiles($"*.{extensionRaw}", SearchOption.AllDirectories))
         {
@@ -34,9 +34,9 @@ public class FunctionInsertString : IFunction
             }
 
             var fileFullPath = file.FullName;
-            var allText = await File.ReadAllTextAsync(fileFullPath);
+            var allText = await File.ReadAllTextAsync(fileFullPath, token);
             var all = insertText + allText;
-            await File.WriteAllTextAsync(fileFullPath, all);
+            await File.WriteAllTextAsync(fileFullPath, all, token);
         }
     }
 }

@@ -15,7 +15,7 @@ public sealed class FunctionUniqueFile : IFunction
         return "targetDir";
     }
 
-    public async Task Do(string[] args)
+    public async Task Do(string[] args, CancellationToken token)
     {
         var targetDirRaw = args[0];
 
@@ -33,8 +33,13 @@ public sealed class FunctionUniqueFile : IFunction
         var fileInfos = targetInfo.GetFiles();
         foreach (var file in fileInfos)
         {
+            if (token.IsCancellationRequested)
+            {
+                return;
+            }
+
             await using var fileStream = file.Open(FileMode.Open, FileAccess.Read);
-            var computeHash = await csp.ComputeHashAsync(fileStream);
+            var computeHash = await csp.ComputeHashAsync(fileStream, token);
             fileStream.Close();
             hashStr.Clear();
             foreach (var hashByte in computeHash)

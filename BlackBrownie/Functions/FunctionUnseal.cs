@@ -12,7 +12,7 @@ public class FunctionUnseal : IFunction
         return "fromDir, toDir";
     }
 
-    public async Task Do(string[] args)
+    public async Task Do(string[] args, CancellationToken token)
     {
         await Task.CompletedTask;
 
@@ -34,6 +34,11 @@ public class FunctionUnseal : IFunction
         var dirFullName = toDir.FullName;
         foreach (var fileInfo in fromDir.EnumerateFiles("*", SearchOption.AllDirectories))
         {
+            if (token.IsCancellationRequested)
+            {
+                return;
+            }
+
             if (string.Equals(fileInfo.Extension, ".ini")
                 || string.Equals(fileInfo.Name, "Thumbs.db")
                 || string.Equals(fileInfo.Name, ".DS_Store"))

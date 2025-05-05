@@ -12,7 +12,7 @@ public sealed class FunctionExpandDirectory : IFunction
         return "targetDir, all";
     }
 
-    public async Task Do(string[] args)
+    public async Task Do(string[] args, CancellationToken token)
     {
         await Task.CompletedTask;
 

@@ -12,7 +12,7 @@ public sealed class FunctionRenamePixivIndex : IFunction
         return "targetDir";
     }
 
-    public async Task Do(string[] args)
+    public async Task Do(string[] args, CancellationToken token)
     {
         await Task.CompletedTask;
 

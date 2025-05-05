@@ -39,10 +39,22 @@ if (i < 0 || i >= functions.Length)
     return;
 }
 
+var cts = new CancellationTokenSource();
+var token = cts.Token;
+Console.CancelKeyPress += (sender, eventArgs) =>
+{
+    eventArgs.Cancel = true;
+    if (!cts.IsCancellationRequested)
+    {
+        Console.WriteLine("cancel!");
+        cts.Cancel();
+    }
+};
+
 var f = functions[i];
 Console.WriteLine($"[{f.GetType().Name}] input args");
 Console.WriteLine(f.DescriptionArgs());
 var readLineArgs = Console.ReadLine();
 var argsArray = readLineArgs?.Split(new[] { ' ', '　' }, StringSplitOptions.RemoveEmptyEntries)
                 ?? Array.Empty<string>();
-await f.Do(argsArray);
+await f.Do(argsArray, token);

@@ -15,7 +15,7 @@ public class FunctionDeleteTarget : IFunction
         return "dir, targetName";
     }
 
-    public async Task Do(string[] args)
+    public async Task Do(string[] args, CancellationToken token)
     {
         await Task.CompletedTask;
 

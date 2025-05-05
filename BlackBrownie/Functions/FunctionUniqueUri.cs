@@ -12,7 +12,7 @@ public class FunctionUniqueUri : IFunction
         return "target.txt";
     }
 
-    public async Task Do(string[] args)
+    public async Task Do(string[] args, CancellationToken token)
     {
         var fileInfo = new FileInfo(args[0]);
         var fileDir = fileInfo.Directory;
@@ -61,6 +61,6 @@ public class FunctionUniqueUri : IFunction
             Console.WriteLine($"[{value}] : {key}");
         }
 
-        await File.WriteAllLinesAsync(Path.Combine(fileDir.FullName, $"uni_{fileInfo.Name}"), dic.Keys.Order());
+        await File.WriteAllLinesAsync(Path.Combine(fileDir.FullName, $"uni_{fileInfo.Name}"), dic.Keys.Order(), token);
     }
 }

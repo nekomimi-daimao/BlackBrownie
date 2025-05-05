@@ -12,7 +12,7 @@ public sealed class FunctionDeleteDeprecated : IFunction
         return "targetDir";
     }
 
-    public async Task Do(string[] args)
+    public async Task Do(string[] args, CancellationToken token)
     {
         await Task.CompletedTask;
         var targetDirRaw = args[0];
@@ -26,6 +26,11 @@ public sealed class FunctionDeleteDeprecated : IFunction
 
         foreach (var fileInfo in targetInfo.GetFiles())
         {
+            if (token.IsCancellationRequested)
+            {
+                return;
+            }
+
             if (!fileInfo.Name.Contains("(1)"))
             {
                 continue;
