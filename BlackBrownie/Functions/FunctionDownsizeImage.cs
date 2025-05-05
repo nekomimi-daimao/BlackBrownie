@@ -69,7 +69,7 @@ public class FunctionDownsizeImage : IFunction
 
         channelWriter.TryComplete();
 
-        var consumers = Enumerable.Range(0, 100)
+        var consumers = Enumerable.Range(0, 4)
             .Select(async _ =>
             {
                 while (await channel.Reader.WaitToReadAsync())
