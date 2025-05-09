@@ -51,7 +51,7 @@ public class FunctionFilterName : IFunction
             }
 
             var to = Path.Combine(towardDir.FullName, fileName);
-            f.CopyTo(to, false);
+            f.CopyTo(to, true);
         }
 
         return Task.CompletedTask;
