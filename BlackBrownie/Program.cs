@@ -16,6 +16,7 @@ IFunction[] functions =
     new FunctionRenamePixivIndex(),
     new FunctionFilterName(),
     new FunctionDownsizeImage(),
+    new FunctionZeroPadding(),
 };
 
 var cts = new CancellationTokenSource();
