@@ -17,6 +17,7 @@ IFunction[] functions =
     new FunctionFilterName(),
     new FunctionDownsizeImage(),
     new FunctionZeroPadding(),
+    new FunctionGenerateThumbnail(),
 };
 
 var cts = new CancellationTokenSource();
