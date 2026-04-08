@@ -6,6 +6,8 @@ namespace BlackBrownie.Functions;
 
 public class FunctionDownsizeImage : IFunction
 {
+    private const string DownSizedDirSuffix = "_downsize";
+
     public string DescriptionFunction()
     {
         return "resize image";
@@ -36,22 +38,28 @@ public class FunctionDownsizeImage : IFunction
 
         // サポートする画像ファイルの拡張子
         var supportedExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".bmp" };
+
+        var targetDirPath = targetDir.FullName;
+        var outputDir = targetDir.CreateSubdirectory($"{targetDir.Name}{DownSizedDirSuffix}");
+        if (!outputDir.Exists)
+        {
+            outputDir.Create();
+        }
+
+        var outputDirPath = outputDir.FullName;
+        var fileDownsized = outputDir.EnumerateFiles("*", SearchOption.AllDirectories)
+            .Where(info => supportedExtensions.Contains(info.Extension.ToLowerInvariant()))
+            .Select(info => info.Name)
+            .ToList();
+
         var fileInfos = targetDir.EnumerateFiles("*", SearchOption.AllDirectories)
             .Where(info => supportedExtensions.Contains(info.Extension.ToLowerInvariant()))
+            .Where(info => !fileDownsized.Contains(info.Name))
             .ToArray();
 
         Console.WriteLine(fileInfos.Length);
 
         var limit = ratio * 1048576;
-
-        var inputDir = targetDir.FullName;
-        if (targetDir.Parent == null)
-        {
-            return;
-        }
-
-        var parentDir = targetDir.Parent.CreateSubdirectory($"{targetDir.Name}_downsize");
-        var outputDir = parentDir.FullName;
 
         var channel = Channel.CreateUnbounded<FileInfo>(new UnboundedChannelOptions
         {
@@ -76,7 +84,7 @@ public class FunctionDownsizeImage : IFunction
                 {
                     if (channel.Reader.TryRead(out var item))
                     {
-                        await Resize(item, inputDir, outputDir, limit, token);
+                        await Resize(item, targetDirPath, outputDirPath, limit, token);
                     }
                 }
             }).ToArray();
